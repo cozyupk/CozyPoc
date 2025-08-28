@@ -12,17 +12,12 @@ namespace CozyPoC.SimplePoCBase.App
     /// - Dispatcher を直接公開せず、必ずこのクラス経由で呼ぶこと。<br/>
     /// - Dispatcher.InvokeAsync は Task<Task> を返すケースがあるため、Unwrap() して内側まで待機している点に注意。
     /// </remarks>
-    public sealed class UIThreadSimpleDispatcher : IUIThreadSimpleDispatcher
+    /// <remarks>
+    /// 指定された Dispatcher をラップするインスタンスを生成する。
+    /// </remarks>
+    public sealed class UIThreadSimpleDispatcher(Dispatcher dispatcher) : IUIThreadSimpleDispatcher
     {
-        private readonly Dispatcher _dispatcher;
-
-        /// <summary>
-        /// 指定された Dispatcher をラップするインスタンスを生成する。
-        /// </summary>
-        public UIThreadSimpleDispatcher(Dispatcher dispatcher)
-        {
-            _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
-        }
+        private readonly Dispatcher _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
 
         public bool CheckAccess => _dispatcher.CheckAccess();
 
