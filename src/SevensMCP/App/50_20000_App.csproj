@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CozyPoC.SevensMCP.App</RootNamespace>
+		<AssemblyName>CozyPoC.SevensMCP.App</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\SimplePoCBase\App\20_20000_App.csproj" />
+	  <ProjectReference Include="..\ViewModels\50_10000_ViewModels.csproj" />
+	  <ProjectReference Include="..\Views\50_15000_Views.csproj" />
+	</ItemGroup>
+
+</Project>

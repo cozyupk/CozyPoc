@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CozyPoC.SimplePocBase.Views</RootNamespace>
+		<AssemblyName>CozyPoC.SimplePocBase.Views</AssemblyName>
+	</PropertyGroup>
+
+</Project>

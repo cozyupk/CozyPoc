@@ -1,0 +1,44 @@
+﻿<Window x:Class="CozyPoC.SevensMCP.Views.TestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CozyPoC.SevensMCP.Views"
+        mc:Ignorable="d"
+        Title="TestWindow" Height="450" Width="800">
+    <!-- 全画面に広がる Grid を使う -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 1つめ -->
+        <Button Grid.Column="0"
+                Command="{Binding ThrowUIExceptionCommand}"
+                FontSize="16" Margin="10"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center">
+            DispatcherUnhandledException
+        </Button>
+
+        <!-- 2つめ -->
+        <Button Grid.Column="1"
+                Command="{Binding ThrowTaskExceptionCommand}"
+                FontSize="16" Margin="10"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center">
+            UnobservedTaskException
+        </Button>
+
+        <!-- 3つめ -->
+        <Button Grid.Column="2"
+                Command="{Binding ThrowBackgroundTaskExceptionCommand}"
+                FontSize="16" Margin="10"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center">
+            UnhandledException
+        </Button>
+    </Grid>
+</Window>

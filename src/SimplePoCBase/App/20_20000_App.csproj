@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CozyPoC.SimplePoCBase.App</RootNamespace>
+		<AssemblyName>CozyPoC.SimplePoCBase.App</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Infrastructure\20_05000_Infrastructure.csproj" />
+	  <ProjectReference Include="..\ViewModels\20_10000_ViewModels.csproj" />
+	  <ProjectReference Include="..\Views\20_15000_Views.csproj" />
+	</ItemGroup>
+
+</Project>

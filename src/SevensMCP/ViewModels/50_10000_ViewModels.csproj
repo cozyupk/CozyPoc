@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CozyPoC.SevensMCP.ViewModels</RootNamespace>
+		<AssemblyName>CozyPoC.SevensMCP.ViewModels</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\Common\Polyfills\Netstandard20\Polyfills.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\SimplePoCBase\ViewModels\20_10000_ViewModels.csproj" />
+	  <ProjectReference Include="..\Domain\50_05000_Domain.csproj" />
+	</ItemGroup>
+	
+</Project>

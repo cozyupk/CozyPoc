@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CozyPoC.SevensMCP.Views</RootNamespace>
+		<AssemblyName>CozyPoC.SevensMCP.Views</AssemblyName>
+	</PropertyGroup>
+
+</Project>

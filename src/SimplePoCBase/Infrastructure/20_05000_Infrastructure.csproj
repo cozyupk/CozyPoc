@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CozyPoC.SimplePoCBase.Infrastructure</RootNamespace>
+		<AssemblyName>CozyPoC.SimplePoCBase.Infrastructure</AssemblyName>
+	</PropertyGroup>
+
+</Project>
