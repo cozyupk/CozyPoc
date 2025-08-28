@@ -70,6 +70,16 @@
         protected virtual TimeSpan TimeoutForUnhandledExceptionNotification { get; } = TimeSpan.FromSeconds(15);
 
         /// <summary>
+        /// UnhandledException 発生時の終了コード。
+        /// </summary>
+        protected virtual int ExitCodeForUnhandledException { get; } = 1;
+
+        /// <summary>
+        /// UnobservedTaskException 発生時の終了コード。
+        /// </summary>
+        protected virtual int ExitCodeForUnobservedTaskException { get; } = 2;
+
+        /// <summary>
         /// UI スレッドに関連付けられた <see cref="Dispatcher"/>。
         /// UI 操作（ダイアログ表示など）を行う際に UI スレッドへマーシャリングするために使用します。
         /// </summary>
@@ -93,11 +103,17 @@
             UIDispatcher = CreateUIDispatcher(_ui);
         }
 
+        /// <summary>
+        /// UIThreadSimpleDispatcher
+        /// </summary>
+        /// <remarks>
+        /// オブジェクト生成戦略の変更等により、派生クラスでオーバーライドされる想定
+        /// (Factory Method パターン)
+        /// </remarks>
         protected virtual IUIThreadSimpleDispatcher CreateUIDispatcher(Dispatcher dispatcher)
         {
             return new UIThreadSimpleDispatcher(dispatcher);
         }
-
 
         /// <summary>
         /// アプリ起動時の処理。グローバル例外の各種ハンドラを登録します。
@@ -131,12 +147,17 @@
                 続行しますか？
                 """;
 
-            e.Handled = true; // ここで即クラッシュさせず、継続可能性を残す
-
-            _ = ConfirmOrShutdownAsync(msg, "UI例外", shutdownAsync: async () => {
-                // 安全終了（必要に応じて保存などを差し込む）
-                await UIDispatcher.InvokeAsync(() => Current.Shutdown());
+            // 非同期的に確認ダイアログを表示し、結果に応じて終了処理を実行
+            // 本ハンドラ自体が同期メソッドであるため await できず、
+            // また他の方法で待機するとUIスレッドをブロックしてしまうため Fire するだけにとどめる
+            _ = ConfirmOrShutdownAsync(msg, "UI例外", shutdownAsync: () =>
+            {
+                // ユーザーが「続行しない」選択をした場合、まずは WPF の安全終了を試みる
+                Current?.Shutdown(ExitCodeForUnhandledException);
+                return Task.CompletedTask;
             });
+
+            e.Handled = true; // ここで即クラッシュさせず、継続可能性を残す
         }
 
         /// <summary>
@@ -168,12 +189,18 @@
                 続行しますか？
                 """;
 
-            e.SetObserved(); // 観測済みにすることで即死を回避
-
-            _ = ConfirmOrShutdownAsync(msg, "非同期例外", shutdownAsync: async () => {
-                // 安全終了（必要に応じて保存などを差し込む）
-                await UIDispatcher.InvokeAsync(() => Current.Shutdown()); 
+            // 非同期的に確認ダイアログを表示し、結果に応じて終了処理を実行
+            // 本ハンドラ自体が同期メソッドであるため await できず、
+            // また他の方法で待機すると GC やファイナライザの動作を不安定にしかねないため、
+            // Fire するだけにとどめる。(本メソッドは finalizer/GC 系から呼ばれる)
+            _ = ConfirmOrShutdownAsync(msg, "非同期例外", shutdownAsync: () =>
+            {
+                // ユーザーが「続行しない」選択をした場合、まずは WPF の安全終了を試みる
+                Current?.Shutdown(ExitCodeForUnobservedTaskException);
+                return Task.CompletedTask;
             });
+
+            e.SetObserved(); // 観測済みにすることで即終了を回避
         }
 
         /// <summary>
@@ -213,9 +240,12 @@
             // UIでの告知完了／タイムアウトのどちらかまで待機（true=告知できた/false=できなかった）
             var shown = sem.WaitOne(TimeoutForUnhandledExceptionNotification);
 
-            // 無条件で即時終了（finally/using は走らない点に注意）
+            // 無条件で即時終了（finally/dispose も走らない点に注意）
+            // 終了コードの設定もできないため、ログ等は事前に済ませておくこと
+            // (この場合でも Current.Shutdown() を利用するという設計上の選択肢はある）
             Environment.FailFast((ex?.Message ?? "UnhandledException") + $"- MessageBox Shown: {shown}");
 
+            // 待機のためのヘルパメソッド
             async void ShutdownWithNotification(string msg, string title, Semaphore semaphore)
             {
                 await ConfirmOrShutdownAsync(msg, title, isFatal: true);
