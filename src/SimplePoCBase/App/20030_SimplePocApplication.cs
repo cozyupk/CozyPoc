@@ -286,14 +286,14 @@
                 catch { return MessageBoxResult.Yes; } // 表示不能時は継続扱い（フェイルセーフ）
             }
 
-            Task DecideAsync(MessageBoxResult result)
+            async Task DecideAsync(MessageBoxResult result)
             {
                 // isFatal: 常に終了 / 非致命: No を選んだ場合に終了。Yes は継続。
                 if (isFatal || result == MessageBoxResult.No)
                 {
-                    if (shutdownAsync != null) return shutdownAsync();
+                    if (shutdownAsync != null)
+                        await UIDispatcher.InvokeAsync(shutdownAsync).ConfigureAwait(false);
                 }
-                return Task.CompletedTask;
             }
         }
     }
